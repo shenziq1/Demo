@@ -25,12 +25,13 @@ import com.github.shenziq1.demo.ui.theme.DemoTheme
 
 @Composable
 fun IntroScreen(
+    gameId: GameId,
     modifier: Modifier = Modifier,
     viewModel: IntroViewModel = viewModel(),
-    gameInfoData: GameInfoData = GameInfoData()
+    gameInfoData: GameInfoData = GameInfoData
 ) {
     val introUiState by viewModel.uiState.collectAsState()
-    val introUiStaticProperty = gameInfoData.data[GameId(0)]
+    val introUiStaticProperty = gameInfoData.data[gameId]
 
     if (introUiStaticProperty != null) {
         Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -171,6 +172,6 @@ fun IconWithValue(
 @Composable
 fun DefaultPreview() {
     DemoTheme {
-        IntroScreen()
+        IntroScreen(gameId = GameId(0))
     }
 }

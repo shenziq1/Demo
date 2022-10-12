@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class IntroViewModel: ViewModel() {
     private val TAG = "introViewModel"
-    private val gameInfoData = GameInfoData().data[GameId(0)]
+    private var gameInfoData = GameInfoData.data[GameId(0)]
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
 
@@ -48,6 +48,7 @@ class IntroViewModel: ViewModel() {
     }
 
     private fun reset(){
-        _uiState.update { it.copy(gamePlayed = gameInfoData!!.gamePlayed, likedCount = gameInfoData.likeCount) }
+        _uiState.update { it.copy(gamePlayed = gameInfoData!!.gamePlayed, likedCount = gameInfoData!!.likeCount) }
     }
+
 }

@@ -1,6 +1,6 @@
 package com.github.shenziq1.demo.data
 
-class GameInfoData {
+object GameInfoData {
     var data = mutableMapOf<GameId, GameInfo>(
         Pair(
             GameId(id = 0), GameInfo(
