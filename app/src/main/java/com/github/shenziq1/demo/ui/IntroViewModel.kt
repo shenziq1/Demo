@@ -1,12 +1,10 @@
 package com.github.shenziq1.demo.ui
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.github.shenziq1.demo.R
+import com.github.shenziq1.demo.data.GameId
+import com.github.shenziq1.demo.data.GameInfoData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class IntroViewModel: ViewModel() {
     private val TAG = "introViewModel"
+    private val gameInfoData = GameInfoData().data[GameId(0)]
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
 
@@ -24,13 +23,13 @@ class IntroViewModel: ViewModel() {
 
     fun updateLike() {
         if (uiState.value.liked){
-            _uiState.update {current -> current.copy(liked = false, likeRes = R.drawable.like)}
-            Log.d(TAG, "like is canceled")
+            _uiState.update {it.copy(liked = false, likeRes = R.drawable.like, likedCount = it.likedCount-1 )}
+            Log.d(TAG, "like is canceled ${gameInfoData!!.likeCount} ${_uiState.value.likedCount}")
         }
 
         else{
-            _uiState.update {current -> current.copy(liked = true, likeRes = R.drawable.liked)}
-            Log.d(TAG, "like the content")
+            _uiState.update {it.copy(liked = true, likeRes = R.drawable.liked, likedCount = it.likedCount+1 )}
+            Log.d(TAG, "like the content ${gameInfoData!!.likeCount} ${_uiState.value.likedCount}")
         }
 
     }
@@ -49,6 +48,6 @@ class IntroViewModel: ViewModel() {
     }
 
     private fun reset(){
-        _uiState.value = IntroUiState()
+        _uiState.update { it.copy(gamePlayed = gameInfoData!!.gamePlayed, likedCount = gameInfoData.likeCount) }
     }
 }

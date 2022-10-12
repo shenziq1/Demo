@@ -10,6 +10,6 @@ data class IntroUiState(
     @DrawableRes val starRes: Int = R.drawable.star,
     val played: Boolean = false,
     val likedCount: Int = 0,
-    val playedCount: Int = 0,
+    val gamePlayed: Int = 0,
 
-)
+    )

@@ -6,8 +6,8 @@ class GameInfoData {
             GameId(id = 0), GameInfo(
                 name = "Player Unknown's Unknown Game",
                 author = "Unknown",
-                timePlayed = 100,
-                liked = 10,
+                gamePlayed = 100,
+                likeCount = 10,
                 introText = "This is a test intro just for testing purpose. I don't know what to say, have fun all!",
                 category = "RPG",
                 coin = 888,

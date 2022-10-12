@@ -1,5 +1,3 @@
 <resources>
     <string name="app_name">Demo</string>
-    <string name="game_played">100</string>
-    <string name="like_counts">10</string>
 </resources>
