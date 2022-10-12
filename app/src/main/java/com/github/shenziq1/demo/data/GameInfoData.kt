@@ -13,6 +13,18 @@ object GameInfoData {
                 coin = 888,
                 diamond = 666
             )
+        ),
+        Pair(
+            GameId(id = 1), GameInfo(
+                name = "Another Game",
+                author = "Unknown",
+                gamePlayed = 1000,
+                likeCount = 100,
+                introText = "This is a test intro just for testing purpose. I don't know what to say, have fun all!",
+                category = "RPG",
+                coin = 888,
+                diamond = 666
+            )
         )
     )
 }

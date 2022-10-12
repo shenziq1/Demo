@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class IntroViewModel: ViewModel() {
     private val TAG = "introViewModel"
-    private var gameInfoData = GameInfoData.data[GameId(0)]
+    private var gameInfoData = GameInfoData.data[GameId(1)]
     private val _uiState = MutableStateFlow(IntroUiState())
     val uiState: StateFlow<IntroUiState> = _uiState.asStateFlow()
 

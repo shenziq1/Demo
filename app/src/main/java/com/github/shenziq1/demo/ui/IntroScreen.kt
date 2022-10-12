@@ -172,6 +172,6 @@ fun IconWithValue(
 @Composable
 fun DefaultPreview() {
     DemoTheme {
-        IntroScreen(gameId = GameId(0))
+        IntroScreen(gameId = GameId(1))
     }
 }
