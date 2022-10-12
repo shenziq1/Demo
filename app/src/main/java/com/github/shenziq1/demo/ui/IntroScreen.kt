@@ -17,37 +17,44 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.shenziq1.demo.R
-import com.github.shenziq1.demo.data.GameId
 import com.github.shenziq1.demo.data.GameInfoData
 import com.github.shenziq1.demo.ui.theme.DemoTheme
 
+// from here: https://stackoverflow.com/questions/67982230/jetpack-compose-pass-parameter-to-viewmodel
+// Just use this for simple illustration
+class MyViewModelFactory(private val gameId: Int) :
+    ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = IntroViewModel(gameId) as T
+}
+//
+
 @Composable
 fun IntroScreen(
-    gameId: GameId,
+    gameId: Int,
     modifier: Modifier = Modifier,
-    viewModel: IntroViewModel = viewModel(),
+    viewModel: IntroViewModel = viewModel(factory = MyViewModelFactory(gameId)),
     gameInfoData: GameInfoData = GameInfoData
 ) {
     val introUiState by viewModel.uiState.collectAsState()
     val introUiStaticProperty = gameInfoData.data[gameId]
 
-    if (introUiStaticProperty != null) {
-        Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            NavigationBar(
-                introUiState.likeRes,
-                introUiState.starRes,
-                { viewModel.updateLike() },
-                { viewModel.updateStar() }
-            )
-            TitleBar(
-                name = introUiStaticProperty.name,
-                author = introUiStaticProperty.author,
-                gamePlayed = introUiState.gamePlayed,
-                likedCount = introUiState.likedCount
-            )
-        }
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+        NavigationBar(
+            introUiState.likeRes,
+            introUiState.starRes,
+            { viewModel.updateLike() },
+            { viewModel.updateStar() }
+        )
+        TitleBar(
+            name = introUiStaticProperty.name,
+            author = introUiStaticProperty.author,
+            gamePlayed = introUiState.gamePlayed,
+            likedCount = introUiState.likedCount
+        )
     }
 }
 
@@ -172,6 +179,6 @@ fun IconWithValue(
 @Composable
 fun DefaultPreview() {
     DemoTheme {
-        IntroScreen(gameId = GameId(1))
+        IntroScreen(1)
     }
 }
