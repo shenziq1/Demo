@@ -46,6 +46,10 @@ class IntroViewModel(gameId: Int): ViewModel() {
 
     }
 
+    fun updateGamePlayed(){
+        _uiState.update { it.copy(gamePlayed = it.gamePlayed+1) }
+    }
+
     private fun reset(){
         _uiState.update { it.copy(gamePlayed = gameInfoData.gamePlayed, likedCount = gameInfoData.likeCount) }
     }

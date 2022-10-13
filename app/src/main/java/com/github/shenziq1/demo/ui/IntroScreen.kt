@@ -4,16 +4,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,19 +46,65 @@ fun IntroScreen(
     val introUiState by viewModel.uiState.collectAsState()
     val introUiStaticProperty = gameInfoData.data[gameId]
 
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-        NavigationBar(
-            introUiState.likeRes,
-            introUiState.starRes,
-            { viewModel.updateLike() },
-            { viewModel.updateStar() }
+    var expansionButtonClicked by remember { mutableStateOf(false) }
+
+    Surface() {
+        //background
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(id = R.drawable.kiana),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
         )
-        TitleBar(
-            name = introUiStaticProperty.name,
-            author = introUiStaticProperty.author,
-            gamePlayed = introUiState.gamePlayed,
-            likedCount = introUiState.likedCount
-        )
+
+        Column(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            NavigationBar(
+                introUiState.likeRes,
+                introUiState.starRes,
+                { viewModel.updateLike() },
+                { viewModel.updateStar() }
+            )
+            Card(
+                backgroundColor = (MaterialTheme.colorScheme.surface.copy(alpha = 0f)),
+                modifier = Modifier.clip(RoundedCornerShape(10.dp)),
+                elevation = 0.dp
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
+                        .padding(10.dp, 10.dp, 10.dp, 0.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TitleBar(
+                        name = introUiStaticProperty.name,
+                        author = introUiStaticProperty.author,
+                        gamePlayed = introUiState.gamePlayed,
+                        likedCount = introUiState.likedCount,
+                        playButtonOnClick = { viewModel.updateGamePlayed() }
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    CategoryBar(
+                        category = introUiStaticProperty.category,
+                        coin = introUiStaticProperty.coin,
+                        diamond = introUiStaticProperty.diamond
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = introUiStaticProperty.introText)
+                    IconButton(onClick = { expansionButtonClicked = !expansionButtonClicked }) {
+                        Icon(
+                            imageVector = if (expansionButtonClicked) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                            contentDescription = "Expand more"
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -68,7 +118,8 @@ fun NavigationBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.DarkGray), horizontalArrangement = Arrangement.SpaceBetween
+            .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.0f)),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
             painter = painterResource(id = R.drawable.back),
@@ -102,21 +153,29 @@ fun NavigationBar(
 }
 
 @Composable()
-fun TitleBar(name: String, author: String, gamePlayed: Int, likedCount: Int) {
+fun TitleBar(
+    name: String,
+    author: String,
+    gamePlayed: Int,
+    likedCount: Int,
+    playButtonOnClick: () -> Unit
+) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.DarkGray),
         verticalAlignment = Alignment.Top
     ) {
         TitleInfo(name = name, gamePlayed = gamePlayed, likedCount = likedCount)
         Spacer(modifier = Modifier.width(16.dp))
-        Text(text = "@$author")
+        Text(
+            text = "@$author",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontStyle = FontStyle(1)
+        )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.End),
-            onClick = { /*TODO*/ }
+            onClick = playButtonOnClick,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
         ) {
             Text(text = "Play")
         }
@@ -126,7 +185,7 @@ fun TitleBar(name: String, author: String, gamePlayed: Int, likedCount: Int) {
 @Composable()
 fun TitleInfo(name: String, gamePlayed: Int, likedCount: Int) {
     Column(modifier = Modifier.fillMaxWidth(0.4F)) {
-        Text(text = name, fontSize = 18.sp)
+        Text(text = name, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -136,15 +195,17 @@ fun TitleInfo(name: String, gamePlayed: Int, likedCount: Int) {
                 space = 0.5F,
                 iconId = R.drawable.games,
                 iconDescription = "game played",
-                valueId = gamePlayed,
-                size = 20
+                value = gamePlayed.toString(),
+                size = 20,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             IconWithValue(
                 space = 1F,
                 iconId = R.drawable.like_small,
                 iconDescription = "like counts",
-                valueId = likedCount,
-                size = 20
+                value = likedCount.toString(),
+                size = 20,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
@@ -155,9 +216,10 @@ fun IconWithValue(
     space: Float,
     iconId: Int,
     iconDescription: String,
-    valueId: Int,
+    value: String,
     size: Int,
     modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.onSurface,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start
 ) {
     Row(
@@ -171,14 +233,55 @@ fun IconWithValue(
             contentDescription = iconDescription
         )
         Spacer(modifier = Modifier.width(10.dp))
-        Text(text = valueId.toString())
+        Text(text = value, color = color)
     }
+}
+
+@Composable
+fun CategoryBar(category: String, coin: Int, diamond: Int) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        IconWithValue(
+            space = 0.5F,
+            iconId = R.drawable.category,
+            iconDescription = "category",
+            value = category,
+            size = 30
+        )
+
+        IconWithValue(
+            space = 0.5F,
+            iconId = R.drawable.coin,
+            iconDescription = "coin",
+            value = coin.toString(),
+            size = 30,
+            horizontalArrangement = Arrangement.End
+
+        )
+        IconWithValue(
+            space = 1F,
+            iconId = R.drawable.diamond,
+            iconDescription = "diamond",
+            value = diamond.toString(),
+            size = 30,
+            horizontalArrangement = Arrangement.End
+        )
+
+    }
+}
+
+@Composable
+fun ExpansionButton(onExpansionButtonClicked: () -> Unit) {
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     DemoTheme {
-        IntroScreen(1)
+        IntroScreen(0)
     }
 }
