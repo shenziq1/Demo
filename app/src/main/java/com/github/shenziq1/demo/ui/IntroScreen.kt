@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -162,6 +163,7 @@ fun TitleBar(
     likedCount: Int,
     playButtonOnClick: () -> Unit
 ) {
+    val gradient = Brush.horizontalGradient(listOf(MaterialTheme.colors.primaryVariant, MaterialTheme.colors.secondaryVariant))
     Row(
         verticalAlignment = Alignment.Top
     ) {
@@ -175,14 +177,42 @@ fun TitleBar(
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentWidth(Alignment.End).clip(RoundedCornerShape(20.dp)),
+                .wrapContentWidth(Alignment.End),
             onClick = playButtonOnClick,
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
+            shape = RoundedCornerShape(20.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondaryVariant)
         ) {
             Text(text = "Play", color = MaterialTheme.colors.onSurface)
         }
     }
 }
+
+// THis is copied https://stackoverflow.com/questions/65542068/jetpack-compose-button-with-gradient-background
+@Composable
+fun GradientButton(
+    text: String,
+    textColor: Color,
+    gradient: Brush,
+    onClick: () -> Unit
+) {
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Transparent
+        ),
+        contentPadding = PaddingValues(),
+        onClick = { onClick() })
+    {
+        Box(
+            modifier = Modifier
+                .background(gradient)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = text, color = textColor)
+        }
+    }
+}
+//
 
 @Composable()
 fun TitleInfo(name: String, gamePlayed: Int, likedCount: Int) {
