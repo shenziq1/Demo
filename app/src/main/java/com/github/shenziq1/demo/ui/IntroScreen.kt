@@ -59,7 +59,6 @@ fun IntroScreen(
 
         Column(
             modifier = Modifier
-                .padding(20.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -71,14 +70,14 @@ fun IntroScreen(
             )
             Card(
                 backgroundColor = (MaterialTheme.colorScheme.surface.copy(alpha = 0f)),
-                modifier = Modifier.clip(RoundedCornerShape(10.dp)),
+                modifier = Modifier.clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp)),
                 elevation = 0.dp
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
-                        .padding(10.dp, 10.dp, 10.dp, 0.dp),
+                        .padding(20.dp, 20.dp, 20.dp, 0.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     TitleBar(
@@ -118,6 +117,7 @@ fun NavigationBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(20.dp)
             .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.0f)),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
