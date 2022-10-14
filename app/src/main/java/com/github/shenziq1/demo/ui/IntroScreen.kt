@@ -4,12 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.AbsoluteCutCornerShape
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +50,7 @@ fun IntroScreen(
 
     var expansionButtonClicked by remember { mutableStateOf(false) }
 
-    Surface() {
+    Scaffold(modifier = modifier) {
         //background
         Image(
             modifier = Modifier.fillMaxSize(),
@@ -69,14 +71,14 @@ fun IntroScreen(
                 { viewModel.updateStar() }
             )
             Card(
-                backgroundColor = (MaterialTheme.colorScheme.surface.copy(alpha = 0f)),
+                backgroundColor = (MaterialTheme.colors.surface.copy(alpha = 0f)),
                 modifier = Modifier.clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp)),
                 elevation = 0.dp
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
+                        .background(MaterialTheme.colors.surface.copy(alpha = 0.5f))
                         .padding(20.dp, 20.dp, 20.dp, 0.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -118,7 +120,7 @@ fun NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-            .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.0f)),
+            .background(color = MaterialTheme.colors.background.copy(alpha = 0.0f)),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
@@ -167,17 +169,17 @@ fun TitleBar(
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = "@$author",
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colors.onSecondary,
             fontStyle = FontStyle(1)
         )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentWidth(Alignment.End),
+                .wrapContentWidth(Alignment.End).clip(RoundedCornerShape(20.dp)),
             onClick = playButtonOnClick,
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondaryVariant),
         ) {
-            Text(text = "Play")
+            Text(text = "Play", color = MaterialTheme.colors.onSurface)
         }
     }
 }
@@ -185,7 +187,7 @@ fun TitleBar(
 @Composable()
 fun TitleInfo(name: String, gamePlayed: Int, likedCount: Int) {
     Column(modifier = Modifier.fillMaxWidth(0.4F)) {
-        Text(text = name, fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(text = name, fontSize = 18.sp, color = MaterialTheme.colors.onSurface)
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -197,7 +199,7 @@ fun TitleInfo(name: String, gamePlayed: Int, likedCount: Int) {
                 iconDescription = "game played",
                 value = gamePlayed.toString(),
                 size = 20,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colors.onSecondary
             )
             IconWithValue(
                 space = 1F,
@@ -205,7 +207,7 @@ fun TitleInfo(name: String, gamePlayed: Int, likedCount: Int) {
                 iconDescription = "like counts",
                 value = likedCount.toString(),
                 size = 20,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colors.onSecondary
             )
         }
     }
@@ -219,7 +221,7 @@ fun IconWithValue(
     value: String,
     size: Int,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurface,
+    color: Color = MaterialTheme.colors.onSurface,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start
 ) {
     Row(

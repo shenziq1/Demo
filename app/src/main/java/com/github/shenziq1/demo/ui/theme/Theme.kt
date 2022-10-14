@@ -3,11 +3,9 @@ package com.github.shenziq1.demo.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
@@ -15,26 +13,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
-private val DarkColorScheme = darkColorScheme(
+private val DarkColorScheme = darkColors(
     primary = Blue,
     onPrimary = White,
     secondary = LightBlue,
-    onSecondary = White,
-    tertiary = Orange,
-    onTertiary = White,
+    onSecondary = Grey,
+    secondaryVariant = Orange,
     background = DarkDarkBlue,
     onBackground = White,
-    onSurfaceVariant = Grey,
     surface = DarkBlue,
     onSurface = White,
 
 
 )
 
-private val LightColorScheme = lightColorScheme(
+private val LightColorScheme = lightColors(
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -72,7 +67,7 @@ fun DemoTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colors = colorScheme,
         typography = Typography,
         content = content
     )
